@@ -1,12 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/images"
-    android:id="@+id/content">
-    android:theme="@android:style/Theme.NoTitleBar"
-    android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-</FrameLayout>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/images"
+        android:id="@+id/content">
+        android:theme="@android:style/Theme.NoTitleBar"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="SCORES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView6"
+                android:rotation="270"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:textSize="36sp" />
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/blueScore"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="30dp"
+                android:rotation="90"
+                android:textColor="@color/link_text_dark"
+                android:textSize="36sp" />
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/redScore"
+                android:layout_marginTop="38dp"
+                android:rotation="270"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="36sp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+    </FrameLayout>
+</RelativeLayout>

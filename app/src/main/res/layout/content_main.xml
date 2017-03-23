@@ -15,4 +15,39 @@
     tools:context="edu.coe.shughes.movingdots.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:text="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:id="@+id/redScore"
+        android:rotation="270"
+        android:textSize="36sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColorHint="@android:color/holo_red_dark"
+        android:textColor="@android:color/holo_red_dark" />
+
+    <TextView
+        android:text="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="35dp"
+        android:id="@+id/oldblueScore"
+        android:rotation="90"
+        android:textSize="36sp"
+        android:textColor="@color/link_text_dark" />
+
+    <TextView
+        android:text="SCORES"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/redScore"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="79dp"
+        android:id="@+id/textView3"
+        android:textSize="30sp"
+        android:rotation="270" />
 </RelativeLayout>

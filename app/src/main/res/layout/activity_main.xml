@@ -9,6 +9,7 @@
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
     tools:context="edu.coe.shughes.movingdots.MainActivity">
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_main"
+        android:id="@+id/include" />
 
 </android.support.design.widget.CoordinatorLayout>

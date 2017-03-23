@@ -17,7 +17,7 @@ import java.util.Random;
 public class BugView extends ImageView {
 
     public static final int REDBUG = 1;
-    public static final int BLUEBUG = 2;
+    public static final int BLUEBUG = 0;
 
     private int maxX;
     private int maxY;
@@ -39,6 +39,10 @@ public class BugView extends ImageView {
     private long delay = 50;
 
     private boolean squished;
+
+    private int timeDead;
+    private boolean dead;
+    private float opacity;
 
     public BugView(Context context) {
         super(context);
@@ -87,6 +91,8 @@ public class BugView extends ImageView {
         direction = 180;
         dirRad = direction * Math.PI /180;
         setRotation(direction);
+        opacity = 1f;
+        dead = false;
 
         if (i == 1) {
             setImageResource(R.drawable.redbug);
@@ -116,6 +122,11 @@ public class BugView extends ImageView {
             squished = true;
         }
     }
+
+    public boolean getSquished(){
+        return squished;
+    }
+
 
 
     private Runnable update = new Runnable() {
@@ -155,6 +166,17 @@ public class BugView extends ImageView {
             }
 
             else{
+                timeDead = timeDead + 50;
+                if (timeDead>500) {
+                    opacity = opacity - 0.05f;
+                    setAlpha(opacity);
+                    if (timeDead > 1500) {
+                        Thread.interrupted();
+                        dead = true;
+                    }
+                }
+                invalidate();
+                refreshHandler.postDelayed(update, delay);
 
             }
         }
