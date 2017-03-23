@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -34,6 +35,7 @@ public class BugView extends ImageView {
     private float direction;
     private double dirRad;
     private int size;
+    private int type;
 
     private Handler refreshHandler = new Handler();
     private long delay = 50;
@@ -47,13 +49,11 @@ public class BugView extends ImageView {
     public BugView(Context context) {
         super(context);
         init(1);
-
     }
 
     public BugView(Context context, int i) {
         super(context);
         init(i);
-
     }
 
     public BugView(Context context, AttributeSet attrs) {
@@ -77,8 +77,6 @@ public class BugView extends ImageView {
         maxX = 1000;
         minX = 0;
         minY= 0;
-        x = rand1.nextInt(maxX);
-        y = rand2.nextInt(maxY);
         size = 150;
 
         squished = false;
@@ -87,7 +85,7 @@ public class BugView extends ImageView {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
         setLayoutParams(layoutParams);
 
-        speed = 10;
+        speed = 20;
         direction = 180;
         dirRad = direction * Math.PI /180;
         setRotation(direction);
@@ -95,20 +93,48 @@ public class BugView extends ImageView {
         dead = false;
 
         if (i == 1) {
-            setImageResource(R.drawable.redbug);
+            type = 1;
+            setBugType(1);
+            x = rand1.nextInt(maxX/2-50)+maxX/2+60;
+            y = rand2.nextInt(maxY-15);
+            setX(x);
+            setY(y);
         }
         else{
-            setImageResource(R.drawable.bluebug);
+            type = 0;
+            setBugType(0);
+            x = rand1.nextInt(maxX/2-60);
+            y = rand2.nextInt(maxY-15);
+            setX(0);
+            setY(y);
         }
         refreshHandler.post(update);
     }
 
     public void setBugType(int t){
+        Random randNum = new Random();
+        int test = randNum.nextInt(3);
         if (t == BLUEBUG){
-            setImageResource(R.drawable.bluebug);
+            if(test == 0) {
+                setImageResource(R.drawable.bluebug);
+            }
+            if(test ==1){
+                setImageResource(R.mipmap.bluebug2);
+            }
+            if(test==2){
+                setImageResource(R.mipmap.bluebug3);
+            }
         }
         else{
-            setImageResource(R.drawable.redbug);
+            if(test == 0) {
+                setImageResource(R.drawable.redbug);
+            }
+            if(test ==1){
+                setImageResource(R.mipmap.redbug2);
+            }
+            if(test==2){
+                setImageResource(R.mipmap.redbug3);
+            }
         }
     }
 
@@ -132,27 +158,26 @@ public class BugView extends ImageView {
     private Runnable update = new Runnable() {
         @Override
         public void run() {
+
             if (!squished) {
                 int newx;
                 int newy;
 
-                // Is the bug going to turn?
                 if (rand.nextInt(30) < 2) {
                     direction += rand.nextInt(90) - 45;
                     dirRad = direction * Math.PI / 180;
                     setRotation(direction);
                 }
 
-                // Where will the bug go.
                 newx = x + (int) (speed * Math.sin(dirRad));
                 newy = y - (int) (speed * Math.cos(dirRad));
 
-                // Did you hit a boundary?
-                if ((newx > maxX - 10) || (newx < minX + 10) || (newy > maxY - 10) || (newy < minY - 10)) {
+                if (collision(newx,newy)) {
                     direction = (direction + 180) % 360;
                     dirRad = direction * Math.PI / 180;
                     setRotation(direction);
-                } else {
+                }
+                else {
                     x = newx;
                     y = newy;
                     setX(x);
@@ -165,14 +190,14 @@ public class BugView extends ImageView {
                 refreshHandler.postDelayed(update, delay);
             }
 
-            else{
+            else {
                 timeDead = timeDead + 50;
-                if (timeDead>500) {
+                if (timeDead > 500) {
                     opacity = opacity - 0.05f;
                     setAlpha(opacity);
                     if (timeDead > 1500) {
-                        Thread.interrupted();
                         dead = true;
+                        Thread.interrupted();
                     }
                 }
                 invalidate();
@@ -181,5 +206,20 @@ public class BugView extends ImageView {
             }
         }
     };
+
+    private boolean collision(int newx, int newy){
+
+        boolean test1 = true;
+        boolean test2 = true;
+
+        test1 = (newx > maxX - 10) || (newx < minX + 10) || (newy > maxY - 10) || (newy < minY - 10);
+        if (type == 1){
+            test2 = (newx < maxX/2 + 50);
+        }
+        else{
+            test2 = (newx > maxX/2 - 50);
+        }
+        return (test1 || test2);
+    }
 
 }
