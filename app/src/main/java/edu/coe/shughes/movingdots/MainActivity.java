@@ -18,6 +18,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     Button multiplayer;
+    Button single;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,5 +39,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        single = (Button) this.findViewById(R.id.single);
+
+        single.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, SinglePlayer.class);
+
+                startActivity(i);
+            }
+        });
+
     }
 }

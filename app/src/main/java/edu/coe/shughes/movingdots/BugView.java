@@ -31,7 +31,7 @@ public class BugView extends ImageView {
     private Random rand1;
     private Random rand2;
 
-    private int speed;
+    private Speed speed;
     private float direction;
     private double dirRad;
     private int size;
@@ -51,9 +51,10 @@ public class BugView extends ImageView {
         init(1);
     }
 
-    public BugView(Context context, int i) {
+    public BugView(Context context, int i, Speed global_speed) {
         super(context);
         init(i);
+        setSpeed(global_speed);
     }
 
     public BugView(Context context, AttributeSet attrs) {
@@ -85,7 +86,7 @@ public class BugView extends ImageView {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
         setLayoutParams(layoutParams);
 
-        speed = 20;
+        //speed = 20;
         direction = 180;
         dirRad = direction * Math.PI /180;
         setRotation(direction);
@@ -109,6 +110,10 @@ public class BugView extends ImageView {
             setY(y);
         }
         refreshHandler.post(update);
+    }
+
+    private void setSpeed(Speed speed1){
+        speed = speed1;
     }
 
     public void setBugType(int t){
@@ -169,8 +174,8 @@ public class BugView extends ImageView {
                     setRotation(direction);
                 }
 
-                newx = x + (int) (speed * Math.sin(dirRad));
-                newy = y - (int) (speed * Math.cos(dirRad));
+                newx = x + (int) (speed.getSpeed() * Math.sin(dirRad));
+                newy = y - (int) (speed.getSpeed() * Math.cos(dirRad));
 
                 if (collision(newx,newy)) {
                     direction = (direction + 180) % 360;

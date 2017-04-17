@@ -2,6 +2,7 @@ package edu.coe.shughes.movingdots;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -26,12 +28,19 @@ public class VersusView extends AppCompatActivity {
     private BugView bug;
 
     private Random rand;
+    private Random randBonus;
 
     private int randomX;
     private int randomY;
 
+    private long delay = 1000;
+
+    private Handler refreshHandler = new Handler();
+
     TextView redScore;
     TextView blueScore;
+
+    private Speed global_speed;
 
 
     @Override
@@ -45,6 +54,9 @@ public class VersusView extends AppCompatActivity {
     public void idControls() {
         redScore = (TextView) this.findViewById(R.id.redScore);
         blueScore = (TextView) this.findViewById(R.id.blueScore);
+
+        refreshHandler.post(update);
+        randBonus = new Random();
     }
 
     @Override
@@ -74,9 +86,11 @@ public class VersusView extends AppCompatActivity {
 
         mFrameLayout = (FrameLayout) findViewById(R.id.content);
 
+        global_speed = new Speed();
+        global_speed.setSpeed(15);
 
         for (int i = 0; i < numBugs; i++) {
-            final BugView b = new BugView(this,0);
+            final BugView b = new BugView(this,0,global_speed);
 
             //b.setX(i * 20);
             //b.setY(40);
@@ -100,7 +114,7 @@ public class VersusView extends AppCompatActivity {
         }
 
         for (int i = 0; i < numBugs; i++) {
-            final BugView b = new BugView(this,1);
+            final BugView b = new BugView(this,1,global_speed);
             //b.setX(i * 20);
             //b.setY(40);
             b.setBugType(BugView.REDBUG);
@@ -124,7 +138,7 @@ public class VersusView extends AppCompatActivity {
     }
 
     private void addBug(final int i) {
-        final BugView b = new BugView(this,i);
+        final BugView b = new BugView(this,i,global_speed);
         rand = new Random(50);
         b.setX(3 * rand.nextInt() + 1);
         b.setY(2 * rand.nextInt() + 1);
@@ -152,6 +166,40 @@ public class VersusView extends AppCompatActivity {
         mFrameLayout.addView(b);
 
     }
+
+    private void bonus(){
+        final BonusView bonus = new BonusView(VersusView.this,-20,200);
+
+        bonus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bonus.setHit(true);
+                increaseSpeed();
+                mFrameLayout.removeView(bonus);
+            }
+        });
+        mFrameLayout.addView(bonus);
+        bonus.invalidate();
+
+        //Toast.makeText(VersusView.this, "HELLO", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void increaseSpeed(){
+        global_speed.setSpeed(global_speed.getSpeed()+10);
+    }
+
+    private Runnable update = new Runnable() {
+        @Override
+        public void run() {
+            randBonus = new Random();
+            if (randBonus.nextInt(500)<20){
+                bonus();
+            }
+            refreshHandler.postDelayed(update, delay);
+        }
+    };
+
 
 
 }
